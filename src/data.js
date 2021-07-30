@@ -10,7 +10,7 @@ const data = [
     id: 1,
     title: "Red Knit",
     content: "Born in Seoul",
-    price: 110000,
+    price: 140000,
   },
 
   {

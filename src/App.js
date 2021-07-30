@@ -20,7 +20,29 @@ function App() {
   // title={shoes[1].title}
   // content={shoes[1].content}
   // price={shoes[1].price}
+  let [ssort, setSsort] = useState(false);
+  let [ssort2, setSsort2] = useState(false);
 
+  let shoesCopy = [...shoes];
+
+  let shoesCopy2 = [...shoes];
+
+  function shoesSort() {
+    setSsort(!ssort);
+    console.log(shoesCopy);
+  }
+
+  function shoesSort2() {
+    setSsort2(!ssort2);
+    console.log(shoesCopy);
+  }
+
+  shoesCopy.sort(function (a, b) {
+    return a.price - b.price;
+  });
+  shoesCopy2.sort(function (a, b) {
+    return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
+  });
   return (
     <>
       <div className="App">
@@ -33,6 +55,7 @@ function App() {
               // content={shoes[1].content}
               // price={shoes[1].price}
               shoes={shoes}
+              shoesCopy={shoesCopy}
             />
           </Route>
 
@@ -43,7 +66,7 @@ function App() {
           <div>어쩌구페이지에요</div>
         </Route> */}
           <Route path="/">
-            <MainPage shoes={shoes} />
+            <MainPage shoes={shoes} ssort={ssort} shoesCopy={shoesCopy} />
           </Route>
         </Switch>
       </div>
@@ -54,28 +77,32 @@ function App() {
 function Navbar() {
   return (
     <>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand">
-            <Link to="/">ShoeShop</Link>
-          </a>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">
+            ShoeShop
+          </Link>
 
-          <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page">
-                <Link to="/">Home</Link>
-              </a>
+          <ul className="nav">
+            <li className="nav-item">
+              <Link className="nav-link active" aria-current="page" to="/">
+                Home
+              </Link>
             </li>
-            <li class="nav-item">
-              <a class="nav-link">
-                <Link to="/detail">Detail</Link>
-              </a>
+            <li className="nav-item">
+              <Link to="/detail" className="nav-link">
+                Detail
+              </Link>
             </li>
-            <li class="nav-item">
-              <a class="nav-link">Link</a>
+            <li className="nav-item">
+              <a className="nav-link">Link</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" tabindex="-1" aria-disabled="true">
+            <li className="nav-item">
+              <a
+                className="nav-link disabled"
+                tabIndex="-1"
+                aria-disabled="true"
+              >
                 Disabled
               </a>
             </li>

@@ -18,15 +18,6 @@ const jumbobutton = css`
 `;
 
 function MainPage({ shoes }) {
-  // const priceShoes = shoes.sort(shoes.price);
-  const [prices, setPrices] = useState({
-    id: 0,
-    price: 0,
-  });
-
-  const priceShoes = shoes.map((v, i) => v.id);
-  console.log(priceShoes);
-  console.log("prices :", prices);
   return (
     <>
       <div css={jumbotron} className="jumbotron">
