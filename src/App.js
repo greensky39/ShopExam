@@ -15,34 +15,20 @@ const homeicon = css`
 
 function App() {
   let [shoes, setShoes] = useState(data);
-  console.log("shoes :", shoes[0].title);
+  let [재고, 재고변경] = useState([10, 11, 12]);
 
-  // title={shoes[1].title}
-  // content={shoes[1].content}
-  // price={shoes[1].price}
   let [ssort, setSsort] = useState(false);
-  let [ssort2, setSsort2] = useState(false);
-
   let shoesCopy = [...shoes];
-
-  let shoesCopy2 = [...shoes];
 
   function shoesSort() {
     setSsort(!ssort);
     console.log(shoesCopy);
   }
 
-  function shoesSort2() {
-    setSsort2(!ssort2);
-    console.log(shoesCopy);
-  }
-
   shoesCopy.sort(function (a, b) {
     return a.price - b.price;
   });
-  shoesCopy2.sort(function (a, b) {
-    return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
-  });
+
   return (
     <>
       <div className="App">
@@ -56,6 +42,8 @@ function App() {
               // price={shoes[1].price}
               shoes={shoes}
               shoesCopy={shoesCopy}
+              재고={재고}
+              재고변경={재고변경}
             />
           </Route>
 
@@ -66,7 +54,7 @@ function App() {
           <div>어쩌구페이지에요</div>
         </Route> */}
           <Route path="/">
-            <MainPage shoes={shoes} ssort={ssort} shoesCopy={shoesCopy} />
+            <MainPage shoes={shoes} setShoes={setShoes} />
           </Route>
         </Switch>
       </div>

@@ -1,5 +1,7 @@
 /* eslint-disable */
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import "./DetailPage.scss";
@@ -15,7 +17,21 @@ let H4sub = styled.h4`
 function DetailPage(props) {
   let history = useHistory();
   let { id } = useParams();
-  console.log("id :", id);
+
+  const [alert, setAlert] = useState(true);
+
+  function disAlert() {
+    setAlert(false);
+  }
+  useEffect(() => {
+    //2초 후에 alert 창 사라지게하기
+    let alertTimer = setTimeout(() => {
+      disAlert();
+    }, 2000);
+    return function () {
+      clearTimeout(alertTimer);
+    };
+  }, [alert]);
 
   const findShoes = props.shoesCopy
     .sort(function (a, b) {
@@ -25,19 +41,30 @@ function DetailPage(props) {
       return item.id == id;
     });
 
-  console.log(findShoes);
+  const [inputdata, setInputData] = useState("");
 
-  const findShoes2 = props.shoes[id];
-  console.log("findShoes2:", findShoes2);
+  function GetInput(e) {
+    setInputData(e.target.value);
+    console.log(inputdata);
+    // setInputData(inputdata);
+  }
+
   return (
     <>
       <div className="container">
+        {inputdata}
+        <div>
+          <input onChange={GetInput}></input>
+        </div>
         <Divbox>
           <H4sub className="red">제목</H4sub>
         </Divbox>
-        <div className="my-alert-yellow">
-          <p>재고가 얼마 남지 않았습니다.</p>
-        </div>
+        {alert === true ? (
+          <div className="my-alert-yellow">
+            <p>재고가 얼마 남지 않았습니다.</p>
+          </div>
+        ) : null}
+
         <div className="row">
           <div className="col-md-6">
             <img
@@ -53,7 +80,17 @@ function DetailPage(props) {
             <h4 className="pt-5">{findShoes.title}</h4>
             <p> {findShoes.content} </p>
             <p>{findShoes.price}</p>
-            <button className="btn btn-danger">주문하기</button>
+            <Info 재고={props.재고} />
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                let 재고복사 = [...props.재고];
+                재고복사[0]--;
+                props.재고변경(재고복사);
+              }}
+            >
+              주문하기
+            </button>
             <button
               className="btn btn-danger"
               onClick={() => {
@@ -69,4 +106,11 @@ function DetailPage(props) {
   );
 }
 
+function Info(props) {
+  return (
+    <div>
+      <p>재고 : {props.재고[0]}</p>
+    </div>
+  );
+}
 export default DetailPage;

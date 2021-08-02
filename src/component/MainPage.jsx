@@ -3,6 +3,7 @@ import React from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { useState } from "react";
+import axios from "axios";
 
 const jumbotron = css`
   height: 500px;
@@ -17,7 +18,9 @@ const jumbobutton = css`
   width: 100px;
 `;
 
-function MainPage({ shoes }) {
+function MainPage({ shoes, setShoes }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   return (
     <>
       <div css={jumbotron} className="jumbotron">
@@ -32,23 +35,6 @@ function MainPage({ shoes }) {
       </div>
       <div className="container">
         <div className="row">
-          {/* <Colcp
-              title={shoes[0].title}
-              content={shoes[0].content}
-              price={shoes[0].price}
-            />
-
-            <Colcp
-              title={shoes[1].title}
-              content={shoes[1].content}
-              price={shoes[1].price}
-            />
-
-            <Colcp
-              title={shoes[2].title}
-              content={shoes[2].content}
-              price={shoes[2].price}
-            /> */}
           {shoes.map((a, i) => {
             return (
               <Colcp
@@ -64,6 +50,29 @@ function MainPage({ shoes }) {
             return <Colcp2 key={i} shoes={shoes[i]} i={i} />;
           })}
         </div>
+
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            axios
+              .get("https://codingapple1.github.io/shop/data2.json")
+              .then((result) => {
+                console.log("성공");
+                console.log(result.data);
+                // 방법1
+                let shoesCopy = [...shoes];
+                shoesCopy.push(...result.data);
+                setShoes(shoesCopy);
+                // 방법2
+                // setShoes([...shoes, ...result.data]);
+              })
+              .catch(() => {
+                console.log("실패");
+              });
+          }}
+        >
+          더보기
+        </button>
       </div>
     </>
   );
@@ -93,6 +102,24 @@ function Colcp2(props) {
       <h4>상품명2 {props.shoes.title}</h4>
       <p>
         상품설명 {props.shoes.content}& 가격 {props.shoes.price}
+      </p>
+    </div>
+  );
+}
+
+function AxiosCol(props) {
+  // "https://codingapple1.github.io/shop/data2.json"
+  return (
+    <div className="col-md-4">
+      <img
+        src={
+          "https://codingapple1.github.io/shop/shoes" + (props.i + 3) + ".jpg"
+        }
+        width="100%"
+      />
+      <h4>상품명2 {props.moreshoes.title}</h4>
+      <p>
+        상품설명 {props.moreshoes.content}& 가격 {props.moreshoes.price}
       </p>
     </div>
   );
