@@ -1,14 +1,20 @@
 /* eslint-disable */
-import React from "react";
+import React, { useContext, useState } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useState } from "react";
 import axios from "axios";
+import { 재고context } from "../App";
 
 const jumbotron = css`
-  height: 500px;
+  padding-top: 60px;
+  text-align: center;
+  height: 400px;
   background-color: grey;
   align-items: center;
+
+  button {
+    margin-top: 40px;
+  }
 `;
 const jumbobutton = css`
   background-color: black;
@@ -25,17 +31,17 @@ function MainPage({ shoes, setShoes }) {
     <>
       <div css={jumbotron} className="jumbotron">
         <h1>20% Season Off</h1>
-        <div>동해물과 백두산이 마르고 닳도록</div>
-        <div>하느님이 보우하사 우리 나라 만세</div>
-        <div>무궁화 삼천리 화려강산</div>
-        <div>대한사람 대한으로 길이 보전하세</div>
+        <div>Until the day when the East Sea's waters and</div>
+        <div>Mt. Baekdu are dry and worn away,</div>
+        <div>God protect and preserve us.</div>
+        <div>Long live our nation!</div>
         <div>
           <button css={jumbobutton}>more</button>
         </div>
       </div>
       <div className="container">
         <div className="row">
-          {shoes.map((a, i) => {
+          {/* {shoes.map((a, i) => {
             return (
               <Colcp
                 key={i}
@@ -45,7 +51,7 @@ function MainPage({ shoes, setShoes }) {
                 price={shoes[i].price}
               />
             );
-          })}
+          })} */}
           {shoes.map((a, i) => {
             return <Colcp2 key={i} shoes={shoes[i]} i={i} />;
           })}
@@ -82,14 +88,15 @@ function Colcp({ shoesnumber, title, content, price }) {
   return (
     <div className="col-md-4">
       <img src={src} width="100%" />
-      <h4>상품명 {title}</h4>
+      <h4>{title}</h4>
       <p>
-        상품설명 {content}& 가격 {price}
+        {content}& {price}
       </p>
     </div>
   );
 }
 function Colcp2(props) {
+  let 재고 = useContext(재고context);
   // const src = `https://codingapple1.github.io/shop/shoes${props.i + 1}.jpg`;
   return (
     <div className="col-md-4">
@@ -99,10 +106,11 @@ function Colcp2(props) {
         }
         width="100%"
       />
-      <h4>상품명2 {props.shoes.title}</h4>
+      <h4>{props.shoes.title}</h4>
       <p>
-        상품설명 {props.shoes.content}& 가격 {props.shoes.price}
+        {props.shoes.content}& {props.shoes.price}
       </p>
+      {재고[props.i]}
     </div>
   );
 }

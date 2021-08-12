@@ -8,11 +8,16 @@ import data from "./data.js";
 import { Link, Route, Switch } from "react-router-dom";
 import MainPage from "./component/MainPage";
 import DetailPage from "./component/DetailPage";
+import Cart from "./component/Cart";
+import SelectPage from "./component/SelectPage";
+import { useContext } from "react";
 
 const homeicon = css`
   color: black;
 `;
 
+export let 재고context = React.createContext();
+// export let 재고context = useContext();
 function App() {
   let [shoes, setShoes] = useState(data);
   let [재고, 재고변경] = useState([10, 11, 12]);
@@ -47,14 +52,22 @@ function App() {
             />
           </Route>
 
+          <Route path="/cart">
+            <Cart />
+          </Route>
+
+          <Route path="/select">
+            <SelectPage />
+          </Route>
+
           <Route path="/:id">
             <div>아무거나적었을때 이거 보여주셈</div>
           </Route>
-          {/* <Route path="/어쩌구" component={Modal}>
-          <div>어쩌구페이지에요</div>
-        </Route> */}
+
           <Route path="/">
-            <MainPage shoes={shoes} setShoes={setShoes} />
+            <재고context.Provider value={재고}>
+              <MainPage shoes={shoes} setShoes={setShoes} />
+            </재고context.Provider>
           </Route>
         </Switch>
       </div>
@@ -83,7 +96,14 @@ function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link">Link</a>
+              <Link to="/select" className="nav-link">
+                Select
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/cart" className="nav-link">
+                Cart
+              </Link>
             </li>
             <li className="nav-item">
               <a

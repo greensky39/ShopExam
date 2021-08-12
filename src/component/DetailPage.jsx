@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import "./DetailPage.scss";
+import { Nav } from "react-bootstrap";
+import { CSSTransition } from "react-transition-group";
 
 let Divbox = styled.div`
   padding: 20px;
@@ -17,6 +19,9 @@ let H4sub = styled.h4`
 function DetailPage(props) {
   let history = useHistory();
   let { id } = useParams();
+
+  let [presstab, setPressTab] = useState(0);
+  let [aniswitch, setAniSwitch] = useState(false);
 
   const [alert, setAlert] = useState(true);
 
@@ -45,7 +50,7 @@ function DetailPage(props) {
 
   function GetInput(e) {
     setInputData(e.target.value);
-    console.log(inputdata);
+    console.log(e.target.value);
     // setInputData(inputdata);
   }
 
@@ -100,10 +105,68 @@ function DetailPage(props) {
               뒤로가기
             </button>
           </div>
+          <div>
+            <button>&lt;</button>
+            <button>&gt;</button>
+          </div>
         </div>
+        <Nav className="mt-5" variant="tabs" defaultActiveKey="/link-0">
+          <Nav.Item>
+            <Nav.Link
+              eventKey="link-0"
+              onClick={() => {
+                setPressTab(0);
+                setAniSwitch(false);
+              }}
+            >
+              Home
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              eventKey="link-1"
+              onClick={() => {
+                setPressTab(1);
+                setAniSwitch(false);
+              }}
+            >
+              Option 1
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              eventKey="link-2"
+              onClick={() => {
+                setPressTab(2);
+                setAniSwitch(false);
+              }}
+            >
+              Option 2
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
+
+        <CSSTransition in={aniswitch} classNames="wow" timeout={1000}>
+          <TabContent presstab={presstab} setAniSwitch={setAniSwitch} />
+        </CSSTransition>
+        {/* {presstab === 0 ? <div className="tab-div0">div0입니다.</div> : null}
+        {presstab === 1 ? <div className="tab-div1">div1입니다.</div> : null}
+        {presstab === 2 ? <div className="tab-div2">div2입니다.</div> : null} */}
       </div>
     </>
   );
+}
+function TabContent(props) {
+  useEffect(() => {
+    props.setAniSwitch(true);
+  });
+  if (props.presstab === 0) {
+    return <div>0번째 내용입니다.</div>;
+  } else if (props.presstab === 1) {
+    return <div>1번째 내용입니다.</div>;
+  } else if (props.presstab === 2) {
+    return <div>2번째 내용입니다.</div>;
+  }
 }
 
 function Info(props) {
