@@ -1,8 +1,28 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { atom, useRecoilState } from "recoil";
 
+const textState = atom({
+  key: "textState",
+  default: "",
+});
 function SelectPage() {
+  function TextInput() {
+    const [text, setText] = useRecoilState(textState);
+
+    const onChange = (event) => {
+      setText(event.target.value);
+    };
+
+    return (
+      <div>
+        <input type="text" value={text} onChange={onChange} />
+        <br />
+        Echo: {text}
+      </div>
+    );
+  }
   const defChartType = [
     { value: "line", name: "라인 차트" },
     { value: "bar", name: "바 차트" },
@@ -88,6 +108,8 @@ function SelectPage() {
         </div>
       </div>
       {/* </form> */}
+      <TextInput />
+      {console.log(Math.floor(Math.random() * 10))}
     </>
   );
 }

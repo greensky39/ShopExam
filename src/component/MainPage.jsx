@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import { css } from "@emotion/react";
 import axios from "axios";
 import { 재고context } from "../App";
+import { useHistory } from "react-router-dom";
 
 const jumbotron = css`
   padding-top: 60px;
@@ -90,7 +91,7 @@ function Colcp({ shoesnumber, title, content, price }) {
       <img src={src} width="100%" />
       <h4>{title}</h4>
       <p>
-        {content}& {price}
+        {content} {price}
       </p>
     </div>
   );
@@ -98,17 +99,26 @@ function Colcp({ shoesnumber, title, content, price }) {
 function Colcp2(props) {
   let 재고 = useContext(재고context);
   // const src = `https://codingapple1.github.io/shop/shoes${props.i + 1}.jpg`;
+  let history = useHistory();
   return (
-    <div className="col-md-4">
+    <div
+      className="col-md-4"
+      onClick={() => {
+        history.push("./detail/" + props.shoes.id);
+        // history.push("./detail/" + props.i);
+      }}
+    >
       <img
         src={
-          "https://codingapple1.github.io/shop/shoes" + (props.i + 1) + ".jpg"
+          "https://codingapple1.github.io/shop/shoes" +
+          (props.shoes.id + 1) +
+          ".jpg"
         }
         width="100%"
       />
       <h4>{props.shoes.title}</h4>
       <p>
-        {props.shoes.content}& {props.shoes.price}
+        {props.shoes.content} {props.shoes.price}
       </p>
       {재고[props.i]}
     </div>
@@ -127,7 +137,7 @@ function AxiosCol(props) {
       />
       <h4>상품명2 {props.moreshoes.title}</h4>
       <p>
-        상품설명 {props.moreshoes.content}& 가격 {props.moreshoes.price}
+        상품설명 {props.moreshoes.content} 가격 {props.moreshoes.price}
       </p>
     </div>
   );

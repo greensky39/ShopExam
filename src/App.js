@@ -11,6 +11,14 @@ import DetailPage from "./component/DetailPage";
 import Cart from "./component/Cart";
 import SelectPage from "./component/SelectPage";
 import { useContext } from "react";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+import TodoList from "./recoiltest/TodoList";
 
 const homeicon = css`
   color: black;
@@ -36,41 +44,43 @@ function App() {
 
   return (
     <>
-      <div className="App">
-        <Navbar />
+      <RecoilRoot>
+        <div className="App">
+          <Navbar />
 
-        <Switch>
-          <Route path="/detail/:id">
-            <DetailPage
-              // title={shoes[1].title}
-              // content={shoes[1].content}
-              // price={shoes[1].price}
-              shoes={shoes}
-              shoesCopy={shoesCopy}
-              재고={재고}
-              재고변경={재고변경}
-            />
-          </Route>
+          <Switch>
+            <Route path="/detail/:id">
+              <DetailPage
+                // title={shoes[1].title}
+                // content={shoes[1].content}
+                // price={shoes[1].price}
+                shoes={shoes}
+                shoesCopy={shoesCopy}
+                재고={재고}
+                재고변경={재고변경}
+              />
+            </Route>
+            <Route path="/cart">
+              <Cart shoesCopy={shoesCopy} />
+            </Route>
+            <Route path="/select">
+              <SelectPage />
+            </Route>
+            <Route path="/todolist">
+              <TodoList />
+            </Route>
+            <Route path="/:id">
+              <div>아무거나적었을때 이거 보여주셈</div>
+            </Route>
 
-          <Route path="/cart">
-            <Cart />
-          </Route>
-
-          <Route path="/select">
-            <SelectPage />
-          </Route>
-
-          <Route path="/:id">
-            <div>아무거나적었을때 이거 보여주셈</div>
-          </Route>
-
-          <Route path="/">
-            <재고context.Provider value={재고}>
-              <MainPage shoes={shoes} setShoes={setShoes} />
-            </재고context.Provider>
-          </Route>
-        </Switch>
-      </div>
+            <Route path="/">
+              <재고context.Provider value={재고}>
+                <MainPage shoes={shoes} setShoes={setShoes} />
+              </재고context.Provider>
+            </Route>
+          </Switch>
+        </div>
+      </RecoilRoot>
     </>
   );
 }
@@ -98,6 +108,11 @@ function Navbar() {
             <li className="nav-item">
               <Link to="/select" className="nav-link">
                 Select
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/todolist" className="nav-link">
+                TodoList
               </Link>
             </li>
             <li className="nav-item">

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from "react";
+import React, { memo } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import styled from "styled-components";
 import "./DetailPage.scss";
 import { Nav } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
+import { connect } from "react-redux";
 
 let Divbox = styled.div`
   padding: 20px;
@@ -45,7 +46,7 @@ function DetailPage(props) {
     .find(function (item) {
       return item.id == id;
     });
-
+  // const findShoes = props.shoesCopy;
   const [inputdata, setInputData] = useState("");
 
   function GetInput(e) {
@@ -54,10 +55,66 @@ function DetailPage(props) {
     // setInputData(inputdata);
   }
 
+  const RecentList = memo(function () {
+    var arr = localStorage.getItem("watched");
+    if (arr == null) {
+      arr = [];
+    } else {
+      arr = JSON.parse(arr);
+    }
+    arr.push(id);
+    const idx = arr.indexOf(id);
+    console.log("idx:", idx);
+    console.log("before arr:", arr);
+    if (idx) {
+      arr.splice(idx);
+      console.log("after arr:", arr);
+      arr.push(id);
+    }
+
+    arr = new Set(arr);
+    arr = [...arr];
+    localStorage.setItem("watched", JSON.stringify(arr));
+    console.log("arr:", arr);
+
+    let getlist = localStorage.getItem("watched");
+    let parsegetlist = JSON.parse(getlist);
+
+    return (
+      <>
+        <div>최근 본 상품</div>
+        <div>
+          {parsegetlist.map((a) => {
+            return (
+              <>
+                <div>{a}</div>
+              </>
+            );
+          })}
+        </div>
+      </>
+    );
+  });
+
+  // useEffect(() => {
+  //   let arr = localStorage.getItem("recent");
+  //   if (arr === null) {
+  //     arr = [];
+  //   } else {
+  //     arr = JSON.parse(arr);
+  //   }
+
+  //   arr.push(id);
+  //   arr = new Set(arr);
+  //   arr = [...arr];
+  //   localStorage.setItem("recent", JSON.stringify(arr));
+  // }, [localStorage]);
+
   return (
     <>
       <div className="container">
         {inputdata}
+
         <div>
           <input onChange={GetInput}></input>
         </div>
@@ -83,15 +140,26 @@ function DetailPage(props) {
           </div>
           <div className="col-md-6 mt-4">
             <h4 className="pt-5">{findShoes.title}</h4>
+            {/* {console.log("FS!!", findShoes.title)} */}
             <p> {findShoes.content} </p>
             <p>{findShoes.price}</p>
-            <Info 재고={props.재고} />
+
+            <Info 재고={props.재고}></Info>
+
             <button
               className="btn btn-danger"
               onClick={() => {
-                let 재고복사 = [...props.재고];
-                재고복사[0]--;
-                props.재고변경(재고복사);
+                props.재고변경([9, 12, 3]);
+                props.dispatch({
+                  type: "항목추가",
+                  payload: {
+                    id: findShoes.id,
+                    title: findShoes.title,
+                    quan: 1,
+                    price: findShoes.price,
+                  },
+                });
+                history.push("/cart");
               }}
             >
               주문하기
@@ -104,6 +172,10 @@ function DetailPage(props) {
             >
               뒤로가기
             </button>
+          </div>
+          <div>
+            {/* <Redup /> */}
+            <RecentList />
           </div>
           <div>
             <button>&lt;</button>
@@ -176,4 +248,12 @@ function Info(props) {
     </div>
   );
 }
-export default DetailPage;
+
+function state를props화(state) {
+  console.log(state);
+  return {
+    shoesStore: state.reducer,
+    alertStore: state.reducer2,
+  };
+}
+export default connect(state를props화)(DetailPage);
